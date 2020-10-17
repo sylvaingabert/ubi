@@ -1,10 +1,11 @@
 import Vue from 'vue';
 import '@/class-component-hooks';
-import './plugins/external/externalPlugins';
+import './config/externalPlugins';
+import './config/globalComponents';
 import App from './App.vue';
 import router from './router/router';
 import store from './store/store';
-import './assets/style/style.css';
+import './assets/style/style';
 
 Vue.config.productionTip = false;
 

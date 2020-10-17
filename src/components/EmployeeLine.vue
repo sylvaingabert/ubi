@@ -1,19 +1,61 @@
 <template>
-    <li class="flex bg-white odd:bg-gray-200">
-        <div class="flex-shrink">{{ employee.id }}</div>
-        <div class="flex-1 flex-grow">{{ employee.name }}</div>
-        <div class="flex-1 flex-grow">
-            <router-link :to="{ name: 'Profile', params: { id: employee.id } }">Voir</router-link>
-        </div>
-    </li>
+  <li
+    v-if="employee"
+    class="employee-line"
+  >
+    <span
+      class="col col--1"
+      data-testid="name"
+    >{{ employee.name }}</span>
+    <div class="col">
+      <ubi-link
+        :to="profileRoute"
+        modifier="primary"
+        data-testid="link"
+      >
+        Voir
+      </ubi-link>
+    </div>
+  </li>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Location } from 'vue-router';
 import EmployeeModel from '@/models/Employee';
+import routesNames from '@/router/routesNames';
 
 @Component
 export default class EmployeeLine extends Vue {
-  @Prop() readonly employee!: EmployeeModel;
+  @Prop({ type: EmployeeModel, required: true }) readonly employee!: EmployeeModel;
+
+  get profileRoute(): Location {
+    return {
+      name: routesNames.EMPLOYEE_UPDATE,
+      params: {
+        id: this.employee.id,
+      },
+    };
+  }
 }
 </script>
+
+<style lang="scss" scoped>
+.employee-line {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+
+  &:nth-child(odd) {
+    background: $alternateBkg;
+  }
+}
+
+.col {
+  &--1 {
+    flex-grow: 1;
+    padding: 0 0.5rem;
+    text-align: left;
+  }
+}
+</style>

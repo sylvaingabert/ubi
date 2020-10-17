@@ -1,52 +1,83 @@
 <template>
-  <div class="home">
-    <h1>Liste des salariés</h1>
-    <input
-      type="search"
-      v-model="search"
-      placeholder="Recherche..."
-      @keyup.enter="onSearch"
+  <main class="home container">
+    <header>
+      <h1 data-testid="title">
+        Liste des salariés
+      </h1>
+      <div class="search-container">
+        <input
+          v-model="search"
+          type="search"
+          placeholder="Recherche..."
+          class="search-input"
+          data-testid="search"
+          @keyup.enter="onSearch"
+        >
+        <ubi-btn
+          modifier="primary"
+          data-testid="searchbtn"
+          @click="onSearch"
+        >
+          Recherche
+        </ubi-btn>
+      </div>
+      <div class="add-line">
+        <p>
+          Nombre total de résultats: <span data-testid="total">{{ employeesModule.total }}</span>
+        </p>
+        <ubi-link
+          :to="createRoute"
+          modifier="primary"
+          class="add-btn"
+          data-testid="createbtn"
+        >
+          Ajouter un employé
+        </ubi-link>
+      </div>
+    </header>
+    <employees-list
+      v-if="employeesModule.total > 0"
+      :items="employeesModule.searchResults"
+      class="list"
+      data-testid="list"
     />
-    <button
-      type="button"
-      @click="onSearch"
-    >Recherche</button>
-    <p>Nombre total de résultats: {{ employeesModule.total }}</p>
-    <div v-if="employeesModule.total > 0">
-      <ul class="container mx-auto flex flex-col flex-auto w9/12">
-        <employee-line
-          v-for="(employee, index) in employeesModule.searchResults"
-          :key="index"
-          :employee="employee"
-        />
-      </ul>
-    </div>
-    <p v-else>No result</p>
-    <paginate
-      v-model="page"
-      :page-count="employeesModule.pagesNumber"
-      :click-handler="onPageChosen"
-      :container-class="'pagination'"
-    />
-  </div>
+    <p
+      v-else
+      class="no-result"
+    >
+      Aucun résultat
+    </p>
+    <nav class="pagination-container">
+      <ubi-pagination
+        v-model="page"
+        :total="employeesModule.pagesNumber"
+      />
+    </nav>
+  </main>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import Paginate from 'vuejs-paginate';
 import EmployeesModule from '@/store/Employees';
-import EmployeeLine from '@/components/EmployeeLine.vue';
+import EmployeesList from '@/components/EmployeesList.vue';
+import routesNames from '@/router/routesNames';
 
 @Component({
   components: {
-    EmployeeLine,
-    Paginate,
+    EmployeesList,
+  },
+  metaInfo() {
+    return {
+      title: 'Ubi - Liste des employés',
+    };
   },
 })
 export default class Home extends Vue {
   employeesModule = EmployeesModule;
 
   private search = '';
+
+  private createRoute = { name: routesNames.EMPLOYEE_CREATE };
 
   set page(value: number) {
     this.employeesModule.setPage(value);
@@ -70,12 +101,17 @@ export default class Home extends Vue {
     }
   }
 
+  @Watch('page')
+  onPageChosen(page: number) {
+    this.refreshPageNum(page);
+  }
+
   refreshPage(search: string) {
     const params = {
       page: String(this.page),
       search,
     };
-    const name = (search !== '') ? 'Search' : 'Home';
+    const name = (search !== '') ? routesNames.SEARCH : routesNames.HOME;
     this.$router.push({ name, params }).catch(() => null);
   }
 
@@ -89,23 +125,54 @@ export default class Home extends Vue {
     this.refreshPage(this.employeesModule.search);
   }
 
-  onPageChosen(page: number) {
-    this.refreshPageNum(page);
-  }
-
   onSearch() {
     this.refreshSearch(this.search);
   }
 
-  mounted() {
-    this.employeesModule.init(this.$route.params);
+  async mounted() {
+    await this.employeesModule.init(this.$route.params);
     this.search = this.employeesModule.search;
   }
 }
 </script>
 
-<style>
-.disabled a {
-  opacity: 0.5;
+<style lang="scss" scoped>
+.home {
+  text-align: center;
+}
+
+.list {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0 0 0;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+}
+
+.search-input {
+  width: 10rem;
+}
+
+.no-result {
+  padding: 2rem 0;
+  font-style: italic;
+}
+
+.add-line {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-btn {
+  align-self: flex-end;
+  max-width: 200px;
 }
 </style>

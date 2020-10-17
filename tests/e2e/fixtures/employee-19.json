@@ -1,0 +1,11 @@
+{
+    "status": "success",
+    "data": {
+        "id": 19,
+        "employee_name": "Bradley Greer",
+        "employee_salary": 132000,
+        "employee_age": 41,
+        "profile_image": ""
+    },
+    "message": "Successfully! Record has been fetched."
+}

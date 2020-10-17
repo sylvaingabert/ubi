@@ -1,6 +1,8 @@
 import qs from 'qs';
 import { Model } from '@vuex-orm/core';
 import { Response } from '@vuex-orm/plugin-axios';
+import { AxiosResponse } from 'axios';
+import isResponseOk from '@/helpers/isResponseOk';
 
 export default class Employee extends Model {
   static entity = 'employees';
@@ -58,6 +60,11 @@ export default class Employee extends Model {
     return this.profile_image;
   }
 
+  set photo(value: string) {
+    this.profile_image = value;
+    Employee.update(this);
+  }
+
   static apiFetch(): Promise<Response> {
     return this.api().get('employees');
   }
@@ -66,27 +73,67 @@ export default class Employee extends Model {
     return this.api().get(`employee/${id}`);
   }
 
-  static apiPersist(data: Employee): Promise<Response> {
+  static async apiPersist(data: Employee): Promise<Response> {
     const { id } = data;
-    return this.api().put(`update/${id}`, qs.stringify({
-      name: data.name,
+    const toSend = {
+      name: String(data.name).trim(),
       salary: data.salary,
       age: data.age,
-    }), {
-      dataTransformer: (response) => ({
-        id,
-        employee_name: response.data.data.name,
-        employee_age: parseInt(response.data.data.age, 10),
-        employee_salary: parseFloat(response.data.data.salary),
-      }),
-    });
+      profile_image: String(data.photo).trim(),
+    };
+    const result = await this.api()
+      .put(`update/${id}`, qs.stringify(toSend), {
+        save: false,
+        dataTransformer: (response) => ({
+          id,
+          employee_name: response.data.data.name || '',
+          employee_age: parseInt(response.data.data.age, 10),
+          employee_salary: parseFloat(response.data.data.salary),
+          profile_image: response.data.data.profile_image || '',
+        }),
+      });
+
+    if (isResponseOk(result.response as AxiosResponse)) {
+      await result.save();
+      return Promise.resolve(result);
+    }
+    return Promise.reject(result);
   }
 
-  static apiDelete(data: Employee): Promise<void | Response> {
+  static async apiDelete(data: Employee): Promise<Response> {
     const id = String(data.id);
-    return this.api().delete(`delete/${id}`)
-      .then(() => {
-        Employee.softDelete(id);
+    const result = await this.api().delete(`delete/${id}`);
+
+    if (isResponseOk(result.response as AxiosResponse)) {
+      await Employee.softDelete(id);
+      return Promise.resolve(result);
+    }
+    return Promise.reject(result);
+  }
+
+  static async apiCreate(data: Employee): Promise<Response> {
+    const toSend = {
+      name: String(data.name).trim(),
+      salary: data.salary,
+      age: data.age,
+      profile_image: String(data.photo).trim(),
+    };
+    const result = await this.api()
+      .post('create', qs.stringify(toSend), {
+        save: false,
+        dataTransformer: (response) => ({
+          id: response.data.data.id,
+          employee_name: String(response.data.data.name || '').trim(),
+          employee_age: parseInt(response.data.data.age, 10),
+          employee_salary: parseFloat(response.data.data.salary),
+          profile_image: response.data.data.profile_image || '',
+        }),
       });
+
+    if (isResponseOk(result.response as AxiosResponse)) {
+      await result.save();
+      return Promise.resolve(result);
+    }
+    return Promise.reject(result);
   }
 }

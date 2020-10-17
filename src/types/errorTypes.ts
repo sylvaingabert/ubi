@@ -3,6 +3,7 @@ enum ErrorTypes {
     FETCH_ALL = 'fetch_all',
     SAVE = 'save',
     DELETE = 'delete',
+    CREATE = 'create',
 }
 
 export default ErrorTypes;

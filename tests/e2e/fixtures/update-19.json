@@ -1,0 +1,9 @@
+{
+    "status": "success",
+    "data": {
+        "name": "Bradley Greer",
+        "salary": 132000,
+        "age": 25
+    },
+    "message": "Successfully! Record has been updated."
+}

@@ -1,0 +1,27 @@
+$containerWidth: 780px;
+
+$textColor: #444;
+$font: helvetica, arial, sans-serif;
+
+$alternateBkg: #eeee;
+
+$btnPrimaryBkg: #0056a6;
+$btnPrimaryColor: #fff;
+
+$btnSecondaryBkg: #eee;
+$btnSecondaryColor: $textColor;
+
+$btnDeleteBkg: #f00;
+$btnDeleteColor: #fff;
+
+$inputBkg: #efefef;
+$inputColor: #333;
+
+$paginationBorderColor: $inputColor;
+$paginationHoverColor: $inputBkg;
+$paginationColor: $btnPrimaryBkg;
+
+$mobileBreakpoint: 992px;
+
+$valid: #008a2c;
+$invalid: #8a0000;

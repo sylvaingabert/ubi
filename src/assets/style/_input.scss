@@ -1,0 +1,25 @@
+input {
+  padding: 0.5rem 1rem;
+  border: 1px solid transparent;
+  background: $inputBkg;
+  color: $inputColor;
+  border-radius: 0.25rem;
+
+  &:disabled {
+    color: lighten($textColor, 30%);
+  }
+
+  &.is-valid {
+    border-color: $valid;
+  }
+
+  &.is-invalid {
+    border-color: $invalid;
+  }
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin: 0.5rem;
+}

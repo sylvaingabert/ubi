@@ -1,0 +1,11 @@
+{
+    "status": "success",
+    "data": {
+        "name": "Jim Gordon",
+        "salary": "9999",
+        "age": "47",
+        "id": 9653,
+        "profile_image": "https://upload.wikimedia.org/wikipedia/en/thumb/9/94/Commissioner-James-Gordon.jpg/220px-Commissioner-James-Gordon.jpg"
+    },
+    "message": "Successfully! Record has been added."
+}

@@ -1,0 +1,50 @@
+@keyframes btnwaiting {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.btn,
+.link {
+  display: inline-block;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.4s ease;
+
+  &--secondary {
+    background: $btnSecondaryBkg;
+    color: $btnSecondaryColor;
+
+    &:hover {
+      box-shadow: 0 0 0.5rem darken($btnSecondaryBkg, 0.85);
+    }
+  }
+
+  &--primary {
+    background: $btnPrimaryBkg;
+    color: $btnPrimaryColor;
+
+    &:hover {
+      box-shadow: 0 0 0.5rem darken($btnPrimaryBkg, 0.85);
+    }
+  }
+
+  &--delete {
+    background: $btnDeleteBkg;
+    color: $btnDeleteColor;
+
+    &:hover {
+      box-shadow: 0 0 0.5rem darken($btnDeleteBkg, 0.85);
+    }
+  }
+
+  &:disabled {
+    cursor: wait;
+    animation: btnwaiting 0.75s ease-in-out alternate infinite backwards;
+  }
+}

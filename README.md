@@ -1,34 +1,34 @@
-# ubi
+# Application de CRUD
 
-## Project setup
+Bienvenue sur ce projet de listing et modification d'employés !
+
+### Installer et démarrer le projet avec [Yarn](https://yarnpkg.com/)
 ```
 yarn install
-```
-
-### Compiles and hot-reloads for development
-```
 yarn serve
 ```
 
-### Compiles and minifies for production
+#### Générer l'application pour l'environnement de production
 ```
 yarn build
 ```
 
-### Run your unit tests
+#### Lancer les tests unitaires
 ```
 yarn test:unit
 ```
 
-### Run your end-to-end tests
+#### Lancer les tests fonctionnels
 ```
 yarn test:e2e
 ```
 
-### Lints and fixes files
+#### Vérifier et corriger les fichiers de script
 ```
 yarn lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+#### Vérifier et corriger les fichiers de style
+```
+yarn lint:style
+```

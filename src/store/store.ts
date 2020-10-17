@@ -10,11 +10,11 @@ import database from '@/database/database';
 Vue.use(Vuex);
 VuexORM.use(VuexORMAxios, {
   axios,
-  baseURL: 'http://dummy.restapiexample.com/api/v1/',
+  baseURL: process.env.VUE_APP_API_URL,
   headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
+    'Content-Type': process.env.VUE_APP_API_CONTENT_TYPE,
   },
-  dataKey: 'data',
+  dataKey: process.env.VUE_APP_API_DATA_KEY,
 });
 VuexORM.use(VuexORMSoftDelete);
 VuexORM.use(VuexORMSearch);
